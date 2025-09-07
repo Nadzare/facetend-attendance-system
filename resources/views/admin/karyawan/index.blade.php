@@ -82,10 +82,10 @@
                                class="inline-flex items-center px-3 py-1 text-xs bg-indigo-600 hover:bg-indigo-700 text-white rounded shadow">
                                 <i class="fas fa-edit mr-1"></i>Edit
                             </a>
-                            <form action="{{ route('admin.karyawan.destroy', $karyawan) }}" method="POST"
-                                  class="inline" onsubmit="return confirm('Yakin ingin menghapus?')">
-                                @csrf
-                                @method('DELETE')
+                            <form action="{{ route('admin.karyawan.destroy', $karyawan->id) }}" method="POST" class="form-hapus">
+  @csrf
+  @method('DELETE')
+
                                 <button type="submit"
                                         class="inline-flex items-center px-3 py-1 text-xs bg-red-600 hover:bg-red-700 text-white rounded shadow">
                                     <i class="fas fa-trash-alt mr-1"></i>Hapus
@@ -126,5 +126,41 @@
 
     searchInput.addEventListener('input', filterTable);
     filterJabatan.addEventListener('change', filterTable);
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+@if(session('success'))
+<script>
+    Swal.fire({
+        title: 'Berhasil!',
+        icon : 'success',
+        text: '{{ session('success') }}',
+        confirmButtonColor: '#2563eb',
+    });
+</script>
+@endif
+
+<script>
+  document.querySelectorAll('.form-hapus').forEach(form => {
+    form.addEventListener('submit', function (e) {
+      e.preventDefault(); // cegah submit langsung
+
+      Swal.fire({
+        title: 'Yakin ingin menghapus?',
+        text: "Data tidak bisa dikembalikan!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Ya, hapus!',
+        cancelButtonText: 'Batal'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          form.submit(); // kirim form setelah konfirmasi
+        }
+      });
+    });
+  });
 </script>
 @endpush

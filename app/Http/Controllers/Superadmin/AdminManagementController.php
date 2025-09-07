@@ -70,7 +70,6 @@ class AdminManagementController extends Controller
 
         return redirect()->route('superadmin.admin.admin-management.index')->with('success', 'Admin berhasil diperbarui!');
     }
-
     public function destroy(Request $request, User $admin)
     {
         $adminName = $admin->name;

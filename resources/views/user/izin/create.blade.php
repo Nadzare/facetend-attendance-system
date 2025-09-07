@@ -62,4 +62,32 @@
         </div>
     </form>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+@if (session('success'))
+<script>
+Swal.fire({
+    icon: 'success',
+    title: 'Berhasil!',
+    text: '{{ session('success') }}',
+    confirmButtonText: 'OK'
+}).then((result) => {
+    if (result.isConfirmed) {
+        window.location.href = "{{ route('izin.index') }}";
+    }
+});
+</script>
+@endif
+
+@if ($errors->any())
+<script>
+Swal.fire({
+    icon: 'warning',
+    title: 'Form Belum Lengkap!',
+    text: 'Silakan lengkapi semua kolom yang wajib diisi.',
+    confirmButtonColor: '#f59e0b',
+});
+</script>
+@endif
 @endsection

@@ -23,7 +23,7 @@ use App\Http\Controllers\Admin\IzinSakitController as AdminIzinSakitController;
 |--------------------------------------------------------------------------
 */
 Route::middleware('guest')->group(function () {
-    Route::get('/login', [\App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'create'])
+    Route::get('/', [\App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'create'])
         ->middleware(RedirectIfAuthenticatedByRole::class)
         ->name('login');
 
@@ -37,9 +37,9 @@ Route::middleware('guest')->group(function () {
 | Home Page (public)
 |--------------------------------------------------------------------------
 */
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
 /*
 |--------------------------------------------------------------------------

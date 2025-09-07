@@ -152,4 +152,29 @@
         maximumAge: 0
     });
 </script>
+
+
+<script>
+    @if (session('success'))
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: '{{ session('success') }}',
+            confirmButtonText: 'Oke!',
+            confirmButtonColor: '#10b981', // green
+            background: '#f0fdf4'
+        });
+    @endif
+
+    @if (session('error'))
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal!',
+            text: '{{ session('error') }}',
+            confirmButtonText: 'Coba Lagi',
+            confirmButtonColor: '#ef4444', // red
+            background: '#fef2f2'
+        });
+    @endif
+</script>
 @endsection

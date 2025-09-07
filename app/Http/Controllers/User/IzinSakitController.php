@@ -41,9 +41,12 @@ class IzinSakitController extends Controller
             'alasan' => $request->alasan,
             'bukti' => $path,
             'status' => 'Pending',
-        ]);
+        ], [
+        'required' => 'Field :attribute wajib diisi.',
+    ]);
 
-        return redirect()->route('izin.index')->with('success', 'Permohonan izin/sakit berhasil dikirim.');
+        return redirect()->back()->with('success', 'Pengajuan izin berhasil!');
+
     }
 
     // ✅ Menampilkan riwayat izin user
