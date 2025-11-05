@@ -46,10 +46,7 @@ class PresensiController extends Controller
             return back()->with('error', '❌ Wajah tidak cocok dengan data terdaftar.');
         }
 
-        // // Validasi akurasi minimal (misal 100 meter)
-        // if ($request->akurasi && $request->akurasi > 100) {
-        //     return back()->with('error', '⚠️ Sinyal GPS kurang akurat. Silakan pindah lokasi dan coba lagi.');
-        // }
+       
 
         // Simpan data presensi
         Presensi::create([

@@ -7,22 +7,27 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Run the migrations.
+     * Jalankan migrasi.
      */
     public function up(): void
     {
-       Schema::table('karyawans', function (Blueprint $table) {
-    $table->string('face_token')->nullable();
-});
+        // Cek dulu kalau kolom face_token belum ada biar nggak error
+        Schema::table('karyawans', function (Blueprint $table) {
+            if (!Schema::hasColumn('karyawans', 'face_token')) {
+                $table->string('face_token')->nullable()->after('foto_wajah');
+            }
+        });
     }
 
     /**
-     * Reverse the migrations.
+     * Balikkan migrasi (hapus kolom face_token).
      */
     public function down(): void
     {
         Schema::table('karyawans', function (Blueprint $table) {
-            //
+            if (Schema::hasColumn('karyawans', 'face_token')) {
+                $table->dropColumn('face_token');
+            }
         });
     }
 };
