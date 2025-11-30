@@ -81,9 +81,16 @@
                         </td>
                         <td class="px-4 py-3">
                             @if ($presensi->foto)
-                                <a href="{{ asset('storage/'.$presensi->foto) }}"
-                                   target="_blank"
-                                   class="text-blue-600 hover:underline text-sm">Lihat</a>
+                                @php
+                                    // Pastikan path tidak dobel 'storage/'
+                                    $fotoPath = str_starts_with($presensi->foto, 'storage/') 
+                                        ? $presensi->foto 
+                                        : 'storage/' . $presensi->foto;
+                                @endphp
+                                <a href="#" onclick="showImageModal('{{ asset($fotoPath) }}', '{{ $presensi->user->name ?? 'Unknown' }} - {{ $presensi->tanggal }}'); return false;"
+                                   class="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800 hover:underline text-sm">
+                                    <i class="fas fa-image"></i> Lihat
+                                </a>
                             @else
                                 <span class="text-gray-400 italic">-</span>
                             @endif
@@ -122,14 +129,50 @@
         {{ $presensis->withQueryString()->links() }}
     </div>
 </div>
+
+<!-- Modal Preview Foto -->
+<div id="imageModal" class="hidden fixed inset-0 bg-black bg-opacity-75 z-50 items-center justify-center p-4" onclick="closeImageModal()">
+    <div class="relative max-w-4xl max-h-full" onclick="event.stopPropagation()">
+        <button onclick="closeImageModal()" class="absolute -top-10 right-0 text-white hover:text-gray-300 text-3xl font-bold">&times;</button>
+        <img id="modalImage" src="" alt="" class="max-w-full max-h-[90vh] rounded-lg shadow-2xl">
+        <p id="modalCaption" class="text-white text-center mt-2 text-sm"></p>
+    </div>
+</div>
+
 @endsection
 
 @push('scripts')
 <script>
+    // Filter form auto-submit
     document.querySelectorAll('.filter-trigger').forEach(input => {
         input.addEventListener('change', () => {
             document.getElementById('filterForm').submit();
         });
+    });
+
+    // Image modal functions
+    function showImageModal(imageSrc, caption) {
+        const modal = document.getElementById('imageModal');
+        const modalImg = document.getElementById('modalImage');
+        const modalCaption = document.getElementById('modalCaption');
+        
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        modalImg.src = imageSrc;
+        modalCaption.textContent = 'Foto Presensi: ' + caption;
+    }
+
+    function closeImageModal() {
+        const modal = document.getElementById('imageModal');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            closeImageModal();
+        }
     });
 </script>
 @endpush

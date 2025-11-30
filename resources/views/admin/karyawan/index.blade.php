@@ -66,11 +66,19 @@
                         <td class="py-3 px-4">{{ $index + 1 }}</td>
                         <td class="py-3 px-4">
                             @if ($karyawan->foto_wajah)
-                                <img src="{{ asset('storage/' . $karyawan->foto_wajah) }}"
-                                     alt="Foto Wajah"
-                                     class="w-12 h-12 object-cover rounded-full shadow border border-gray-300">
+                                @php
+                                    // Pastikan path tidak dobel 'storage/'
+                                    $fotoPath = str_starts_with($karyawan->foto_wajah, 'storage/') 
+                                        ? $karyawan->foto_wajah 
+                                        : 'storage/' . $karyawan->foto_wajah;
+                                @endphp
+                                <img src="{{ asset($fotoPath) }}"
+                                     alt="Foto {{ $karyawan->nama }}"
+                                     class="w-12 h-12 object-cover rounded-full shadow border border-gray-300 cursor-pointer hover:opacity-80 transition"
+                                     onclick="showImageModal('{{ asset($fotoPath) }}', '{{ $karyawan->nama }}')"
+                                     onerror="this.src='{{ asset('starindo.png') }}'; this.classList.remove('rounded-full'); this.classList.add('rounded');">
                             @else
-                                <span class="text-gray-400 italic">Belum ada</span>
+                                <span class="text-gray-400 italic text-xs">Belum ada</span>
                             @endif
                         </td>
                         <td class="py-3 px-4 font-semibold">{{ $karyawan->nama }}</td>
@@ -102,10 +110,21 @@
         </table>
     </div>
 </div>
+
+<!-- Modal Preview Foto -->
+<div id="imageModal" class="hidden fixed inset-0 bg-black bg-opacity-75 z-50 items-center justify-center p-4" onclick="closeImageModal()">
+    <div class="relative max-w-4xl max-h-full" onclick="event.stopPropagation()">
+        <button onclick="closeImageModal()" class="absolute -top-10 right-0 text-white hover:text-gray-300 text-3xl font-bold">&times;</button>
+        <img id="modalImage" src="" alt="" class="max-w-full max-h-[90vh] rounded-lg shadow-2xl">
+        <p id="modalCaption" class="text-white text-center mt-2 text-sm"></p>
+    </div>
+</div>
+
 @endsection
 
 @push('scripts')
 <script>
+    // Search and filter function
     const searchInput = document.getElementById('searchInput');
     const filterJabatan = document.getElementById('filterJabatan');
 
@@ -126,6 +145,31 @@
 
     searchInput.addEventListener('input', filterTable);
     filterJabatan.addEventListener('change', filterTable);
+
+    // Image modal functions
+    function showImageModal(imageSrc, caption) {
+        const modal = document.getElementById('imageModal');
+        const modalImg = document.getElementById('modalImage');
+        const modalCaption = document.getElementById('modalCaption');
+        
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        modalImg.src = imageSrc;
+        modalCaption.textContent = 'Foto: ' + caption;
+    }
+
+    function closeImageModal() {
+        const modal = document.getElementById('imageModal');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            closeImageModal();
+        }
+    });
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

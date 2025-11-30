@@ -23,9 +23,10 @@ use App\Http\Controllers\Admin\IzinSakitController as AdminIzinSakitController;
 |--------------------------------------------------------------------------
 */
 Route::middleware('guest')->group(function () {
-    Route::get('/', [\App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'create'])
-        ->middleware(RedirectIfAuthenticatedByRole::class)
-        ->name('login');
+    // Root route redirects to login page
+    Route::get('/', function() {
+        return redirect('/login');
+    })->middleware(RedirectIfAuthenticatedByRole::class);
 
     Route::get('/register', [\App\Http\Controllers\Auth\RegisteredUserController::class, 'create'])
         ->middleware(RedirectIfAuthenticatedByRole::class)
